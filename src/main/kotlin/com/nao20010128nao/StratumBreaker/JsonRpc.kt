@@ -39,6 +39,8 @@ class JsonRpc(val ip: String, val port: Int) {
                         gson.fromJson(json["error"], Response.Error::class.java)
                     } else if (json.has("result") && !json["result"].isJsonNull) {
                         Response.Success(json["result"])
+                    } else if (json.has("params") && !json["params"].isJsonNull) {
+                        Response.Notify(json["params"].asJsonArray, json["method"].asString)
                     } else {
                         Response.NoResult
                     }
@@ -74,6 +76,11 @@ class JsonRpc(val ip: String, val port: Int) {
         }
     }
 
+    fun shutSocket() {
+        socket?.close()
+        socket = null
+    }
+
     fun add(handler: Handler) {
         handlers.add(handler)
     }
@@ -90,6 +97,8 @@ class JsonRpc(val ip: String, val port: Int) {
         data class Success(val content: JsonElement) : Response()
 
         data class Error(val code: Int, val message: String) : Response()
+
+        data class Notify(val content: JsonArray, val method: String) : Response()
 
         object NoResult : Response()
     }
