@@ -29,7 +29,7 @@ class JsonRpc(val ip: String, val port: Int) {
             writer = localSocket.getOutputStream().writer()
             while (isConnected) {
                 try {
-                    val line = localReader.readLine()!!
+                    val line = localReader.readLine() ?: continue
                     //println(">>> $line")
                     val json = try {
                         gson.fromJson(line, JsonObject::class.java)
@@ -37,7 +37,13 @@ class JsonRpc(val ip: String, val port: Int) {
                         null
                     } ?: continue
                     val result = if (json.has("error") && !json["error"].isJsonNull) {
-                        gson.fromJson(json["error"], Response.Error::class.java)
+                        val err = json["error"]
+                        if (err.isJsonArray) {
+                            val (codeElem, messageElem) = err.asJsonArray.toList()
+                            Response.Error(codeElem.asInt, messageElem.asString)
+                        } else {
+                            gson.fromJson(err, Response.Error::class.java)
+                        }
                     } else if (json.has("result") && !json["result"].isJsonNull) {
                         Response.Success(json["result"])
                     } else if (json.has("params") && !json["params"].isJsonNull) {
@@ -45,7 +51,7 @@ class JsonRpc(val ip: String, val port: Int) {
                     } else {
                         Response.NoResult
                     }
-                    val id = json["id"].run {
+                    val id = json["id"]?.run {
                         if (isJsonNull) null else asInt
                     }
                     handlers.forEach {
