@@ -65,9 +65,7 @@ object Main {
 
         val handler = object : JsonRpc.Handler {
             override fun onData(id: Int?, response: JsonRpc.Response) {
-                println(response)
                 if (response is JsonRpc.Response.Notify) {
-                    println(response.method)
                     when (response.method) {
                         "mining.notify" -> {
                             val (jobIdElem, _, _, _, _, _, nTimeElem) = response.content.toList()
@@ -84,6 +82,8 @@ object Main {
                         } catch (e: Throwable) {
                         }
                     }
+                } else if (response is JsonRpc.Response.Error) {
+                    println("Error: ${response.message}")
                 }
             }
         }

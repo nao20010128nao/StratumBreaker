@@ -30,7 +30,7 @@ class JsonRpc(val ip: String, val port: Int) {
             while (isConnected) {
                 try {
                     val line = localReader.readLine()!!
-                    println(">>> $line")
+                    //println(">>> $line")
                     val json = try {
                         gson.fromJson(line, JsonObject::class.java)
                     } catch (e: Throwable) {
@@ -68,7 +68,7 @@ class JsonRpc(val ip: String, val port: Int) {
                 "method" to method.toJsonElement(),
                 "params" to data
         ))
-        println("<<< $payload")
+        //println("<<< $payload")
         synchronized(writer!!) {
             writer!!.also {
                 it.write(payload + "\n")
