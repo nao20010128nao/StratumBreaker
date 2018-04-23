@@ -1,5 +1,7 @@
 package com.nao20010128nao.StratumBreaker
 
+import com.nao20010128nao.ked.component6
+import com.nao20010128nao.ked.component7
 import joptsimple.OptionParser
 import java.net.URI
 import java.security.SecureRandom
