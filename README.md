@@ -1,3 +1,4 @@
 # StratumBreaker
-Attacks to Mining Pools implements [SMP](https://github.com/ctubio/php-proxy-stratum/wiki/Stratum-Mining-Protocol).   
-Only RAW TCP connection is implemented. (Urls starting with `stratum+tcp://`)
+Attacks to Mining Pools that uses [SMP](https://github.com/ctubio/php-proxy-stratum/wiki/Stratum-Mining-Protocol).    
+Urls starting with `stratum+tcp://` is supported.    
+No algo can be specified: all the algo uses same protocol. (Except for Ethereum, etc)
