@@ -54,12 +54,12 @@ object Main {
                 }
                 Thread.sleep(100)
             }
-        }.also { runningValdalism.add(it) }
+        }
 
         fun vandalismIfNotStarted() {
             if (runningValdalism.isNotEmpty()) return
             for (i in 1..threads) {
-                vandalism()
+                runningValdalism += vandalism()
             }
         }
 
